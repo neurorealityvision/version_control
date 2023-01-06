@@ -2,31 +2,38 @@
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
+import cv2
 
-#test function for make rgb of pixel with image
-def rgb_of_pixel (img_path, x, y):
-    im = Image.open(img_path).convert("RGB")
-    r,g,b = im.getpixel((x,y))
-    a = (r,g,b)
-    return a
+#read the image file
+im = Image.open('dog.jpg')
+pix = np.array(im)
+height = im.size[1]
+width = im.size[0]
+print("Size :", width ,"x", height)
 
-img = "dog.jpg"
-print (rgb_of_pixel(img,10,10))
+#make 3-dimension RGB data
+numpy_array = np.array(im, dtype="uint8")
+print(numpy_array)
+print("######################")
 
-"""
-# step-2 Define Image size - height, width and depth
-# (rows, columns, dimensions) format
-height, width, channel = 64, 64, 3
+#convert 3-dimension RGB data into 1-dimension
+flatten_numpy_array = np.ravel(numpy_array, order='C')
+print(flatten_numpy_array)
 
-# step-3 Define Red,Green,Blue Color -for each- 0 to 255
-red, green, blue = 0, 0, 0
+#this is for test
+#save txt file of rgb data of picture
+#np.savetxt("dog_rgb_data", flatten_numpy_array)
 
-# step-4 Generate RGB Numpy Array
-arr = np.full((height, width, channel), [red, green, blue], dtype=('uint8'))
+#load txt data
+loaded_array = np.loadtxt("dog_rgb_data",dtype='uint8')
 
-# step-5 Show inline Image Plot
-plt.imshow(arr)
+#reshape flatten data into 3-dimension
+print("######################")
+reshaped_numpy_array = loaded_array.reshape(height,width,3)
+print(reshaped_numpy_array)
 
-# step-6 Remove edge numbers from Image Plot
-plt.axis('off')
-"""
+image2 = Image.fromarray(reshaped_numpy_array, 'RGB')
+image2.show()
+
+
+
